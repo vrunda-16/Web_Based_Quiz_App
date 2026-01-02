@@ -1,0 +1,222 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>View Score </title>
+
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+<style>
+:root {
+    --violet-main: #7C3AED;
+    --violet-dark: #5B21B6;
+    --violet-light: #8B5CF6;
+    --violet-accent: #C4B5FD;
+    --bg-light: #FAF5FF;
+    --white: #FFFFFF;
+    --text-primary: #1F2937;
+    --text-secondary: #6B7280;
+    --row-hover: #EDE9FE;
+    --error: #DC2626;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--bg-light), #EDE9FE);
+}
+
+
+.header {
+    position: sticky;
+    top: 0;
+    background: linear-gradient(135deg, var(--violet-main), var(--violet-light));
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 10px 25px rgba(124, 58, 237, 0.15);
+}
+
+.header-title {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.header a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.45rem 0.9rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.4);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.header a:hover {
+    background: rgba(255,255,255,0.15);
+}
+
+
+.container {
+    max-width: 1100px;
+    margin: 2.5rem auto;
+    padding: 0 1.5rem;
+}
+
+.page-title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--violet-main);
+    margin-bottom: 1.5rem;
+}
+
+
+.message-card {
+    background: var(--white);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(124, 58, 237, 0.15);
+    text-align: center;
+    color: var(--error);
+    font-weight: 600;
+}
+
+
+.table-card {
+    background: var(--white);
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(124, 58, 237, 0.15);
+    overflow-x: auto;
+}
+
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background: var(--violet-main);
+    color: white;
+}
+
+thead th {
+    padding: 0.9rem;
+    text-align: left;
+    font-weight: 600;
+}
+
+tbody td {
+    padding: 0.85rem;
+    border-bottom: 1px solid #E5E7EB;
+}
+
+tbody tr:nth-child(even) {
+    background: #FAF5FF;
+}
+
+tbody tr:hover {
+    background: var(--row-hover);
+}
+
+
+.footer {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.footer a {
+    text-decoration: none;
+    color: var(--violet-main);
+    font-weight: 500;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    border: 1px solid var(--violet-accent);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.footer a:hover {
+    background: var(--violet-accent);
+}
+</style>
+</head>
+
+<body>
+
+<jsp:useBean id="view" class="com.internship.quiz.beans.ShowScoreStudentBean"/>
+${view.displayScoreToAdmin()}
+
+size = ${view.arr.size()}
+
+<div class="header">
+    <div class="header-title">Quiz Management System</div>
+    <a href="AdminMenu.jsp"><i class="fa-solid fa-arrow-left"></i> Go Back</a>
+</div>
+
+
+<div class="container">
+
+<c:choose>
+
+    <c:when test="${view.status == 1}">
+        <div class="page-title">All Scores</div>
+
+        <div class="table-card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Quiz Title</th>
+                        <th>Student Id</th>
+                        <th>Score</th>
+                        <th>Total Questions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach var="q" items="${view.arr}">
+                        <tr>
+                            <td>${q[0]}</td>
+                            <td>${q[1]}</td>
+                            <td>${q[2]}</td>
+                            <td>${q[3]}</td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </div>
+    </c:when>
+
+    <c:when test="${view.status==0}">
+        <div class="message-card">
+            Something went wrong !!
+        </div>
+    </c:when>
+
+    <c:otherwise>
+		<div class="message-card">
+            No student has attempted any quiz !!
+        </div>
+        
+
+    </c:otherwise>
+
+</c:choose>
+
+</div>
+
+</body>
+</html>

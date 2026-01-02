@@ -1,0 +1,222 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>List Quiz</title>
+
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+<style>
+:root {
+    --violet-main: #7C3AED;
+    --violet-dark: #5B21B6;
+    --violet-light: #8B5CF6;
+    --violet-accent: #C4B5FD;
+    --bg-light: #FAF5FF;
+    --white: #FFFFFF;
+    --text-primary: #1F2937;
+    --text-secondary: #6B7280;
+    --row-hover: #EDE9FE;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    margin: 0;
+    background: linear-gradient(135deg, var(--bg-light), #EDE9FE);
+    min-height: 100vh;
+}
+
+
+.header {
+    position: sticky;
+    top: 0;
+    background: linear-gradient(135deg, var(--violet-main), var(--violet-light));
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 10px 25px rgba(124, 58, 237, 0.15);
+    z-index: 100;
+}
+
+.header-title {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.header-actions a {
+    color: white;
+    text-decoration: none;
+    margin-left: 1rem;
+    font-weight: 500;
+    padding: 0.45rem 0.9rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.4);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.header-actions a:hover {
+    background: rgba(255,255,255,0.15);
+}
+
+
+.container {
+    max-width: 1100px;
+    margin: 2.5rem auto;
+    padding: 0 1.5rem;
+}
+
+
+.page-title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--violet-main);
+}
+
+.sub-title {
+    text-align: center;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+}
+
+.table-card {
+    background: var(--white);
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(124, 58, 237, 0.15);
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background: var(--violet-main);
+    color: white;
+}
+
+thead th {
+    padding: 0.9rem;
+    text-align: left;
+    font-weight: 600;
+}
+
+tbody td {
+    padding: 0.85rem;
+    border-bottom: 1px solid #E5E7EB;
+}
+
+tbody tr:nth-child(even) {
+    background: #FAF5FF;
+}
+
+tbody tr:hover {
+    background: var(--row-hover);
+}
+
+
+.delete-icon img {
+    transition: transform 0.2s ease;
+}
+
+.delete-icon img:hover {
+    transform: scale(1.15);
+}
+
+
+.footer-actions {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+.footer-actions a {
+    text-decoration: none;
+    color: var(--violet-main);
+    font-weight: 500;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    border: 1px solid var(--violet-accent);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.footer-actions a:hover {
+    background: var(--violet-accent);
+}
+</style>
+</head>
+
+<body>
+
+<jsp:useBean id="lq" class="com.internship.quiz.beans.ListQuizAdminBean" scope="session"/>
+${lq.fetchQuiz()}
+
+
+<div class="header">
+    <div class="header-title">${initParam.appTitle}</div>
+    <div class="header-actions">
+        <a href="logout.jsp"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</a>
+        <a href="AdminMenu.jsp"><i class="fa-solid fa-arrow-left"></i> Go Back</a>
+    </div>
+</div>
+
+
+<div class="container">
+
+    <div class="page-title"></div>
+    <div class="sub-title">Available Quizzes</div>
+
+    <div class="table-card">
+        <table>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Created By</th>
+                    <th>Created At</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:forEach var="q" items="${lq.list}">
+                    <tr>
+                        <td>${q.id}</td>
+                        <td>${q.title}</td>
+                        <td>${q.creatorId}</td>
+                        <td>${q.date}</td>
+                        <td class="delete-icon">
+                           	<%-- <a href="deleteQuiz.jsp?quizid=${q.id}">
+                                <img src="images/delete.png" alt="Delete" height="24px">
+                          	</a>--%>
+                           <form action="deleteQuiz.jsp" method="post"onsubmit="return confirm('Are you sure you want to delete this quiz?');">
+    							<input type="hidden" name="quizid" value="${q.id}">
+    							<button type="submit" style="border:none; background:none; cursor:pointer;">
+        							<img src="images/delete.png" alt="Delete" height="24px">
+    							</button>
+							</form>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+</body>
+</html>
