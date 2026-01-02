@@ -1,0 +1,51 @@
+package com.internship.quiz.beans;
+import java.util.List;
+
+import com.internship.quiz.dao.AttemptDao;
+
+public class ShowScoreStudentBean {
+	List<Object[]> arr1;
+	List<Object[]> arr2;
+	int studentId;
+	int status=0;
+	public ShowScoreStudentBean() {
+
+	}
+	public List<Object[]> getArr1() {
+		return arr1;
+	}
+	public void setArr(List<Object[]> arr) {
+		this.arr1 = arr1;
+	}
+	public int getStudentId() {
+		return studentId;
+	}
+	public void setStudentId(int studentId) {
+		this.studentId = studentId;
+	}	
+	
+	public int getStatus() {
+		return status;
+	}
+	public void setStatus(int status) {
+		this.status = status;
+	}
+	public void displayScore() {
+		try(AttemptDao attemptDao=new AttemptDao()){
+			this.arr1=attemptDao.displayScoreToStudent(this.studentId);
+			status=1;
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	public void displayScoreToAdmin() {
+
+		try(AttemptDao attemptDao=new AttemptDao()){
+			this.arr2=attemptDao.displayScoreToAdmin();
+			status=1;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+}
